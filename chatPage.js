@@ -4,38 +4,37 @@ const express = require('express');
 const router = express.Router();
 
 let read = (req,res) =>{
+
+}
+
+router.get('/',(req,res)=>{
     fs.readFile('message.txt',(err,data)=>{
         if(err){
             console.log(err);
         }
 
-
         data = (data.length===0)?'No chats exist':data;
         console.log("sending data: ");
         let html = `<h1>${data}</h1>`;
-        html+='<form method="post" action="/">';
+        html+=`<form onSubmit="document.getElementById('username').value=localStorage.getItem('username')" method="post" action="/">`;
         html+=`<input type="text" name="message" placeholder="message" id="message"><input type="hidden" name="username" id="username" value=""><input type="submit" value="send">`;
-        html+='</form>';
-        html+='<script>';
-        html+='document.getElementById("username").value = localStorage.getItem("username");';
-        html+="document.addEventListener('DOMContentLoaded', (e)=> {e.preventDefault(); document.getElementById('message').value = ''})";
-        html+='</script>';
+        html+=`</form>`;
         res.send(html);
     });
-}
+});
 
-router.use('/',(req,res,next)=>{
+router.post('/',(req,res,next)=>{
     if(req.body.message !== undefined && req.body.message !== ""){
         console.log("message recieved to append", req.body);
         fs.appendFile('message.txt', req.body.username+": "+req.body.message+";    \n",(err)=>{
             if(err){
                 console.log(err);
             }
-            read(req,res);
+            res.redirect('/');
         });
     }
     else{
-        read(req,res);
+        res.redirect('/');
     }
 });
 
