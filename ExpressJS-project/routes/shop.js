@@ -3,6 +3,8 @@ const path = require('path');
 
 const router = express.Router();
 
+const contactController = require('../controllers/contactCtrl');
+
 router.get('/', (req,res,next) => {
     res.sendFile(path.join(__dirname,"..","views","shop.html"));
     // console.log('welcome to express JS');
@@ -10,13 +12,9 @@ router.get('/', (req,res,next) => {
     // next();
 });
 
-router.get('/contactus',(req,res)=>{
-    res.sendFile(path.join(__dirname,"..","views","contactus.html"));
-});
+router.get('/contactus',contactController.getContactUs);
 
-router.post('/success',(req,res)=>{
-    res.sendFile(path.join(__dirname,"..","views","success.html"));
-});
+router.post('/success',contactController.getSuccessPage);
 
 
 module.exports = router;
