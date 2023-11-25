@@ -10,4 +10,13 @@ router.get('/', (req,res,next) => {
     // next();
 });
 
+router.get('/contactus',(req,res)=>{
+    res.sendFile(path.join(__dirname,"..","views","contactus.html"));
+});
+
+router.post('/success',(req,res)=>{
+    res.sendFile(path.join(__dirname,"..","views","success.html"));
+});
+
+
 module.exports = router;

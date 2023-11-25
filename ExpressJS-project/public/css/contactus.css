@@ -1,0 +1,6 @@
+.form--control label{
+    display: block;
+    color: black;
+    font: inherit;
+    width: 100%;
+}
