@@ -3,8 +3,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+//routes
+const adminRoutes = require('./routes/adminRoutes.js');
+const shopRoutes = require('./routes/shopRoutes.js');
+
+//controller
+const error404Controller = require('./controllers/404ErrorController.js');
+
 
 const app = express();
 //parse body
@@ -15,10 +20,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/admin',adminRoutes);
 app.use('/shop',shopRoutes);
 
-app.use((req,res,next) => {
-    res.status(404).sendFile(path.join(__dirname,"views","ErrorPage.html"));
-    // next();
-});
+
+
+
+//error Page handler MW
+app.use(error404Controller.Error404);
 
 
 app.listen(3000);
