@@ -13,7 +13,7 @@ module.exports = class Cart{
         fs.readFile(p, (err,data) => {
             let cart = {products: [], totalPrice: 0};
             if(err){
-                console.log('CartReadError: ',err);
+                console.error('CartReadError: ',err);
             }
             else{
                 cart = JSON.parse(data);
@@ -37,8 +37,8 @@ module.exports = class Cart{
             cart.totalPrice = cart.totalPrice+ +productPrice;
             //write to file
             fs.writeFile(p, JSON.stringify(cart), (err)=>{
-                console.log('CartWriteError: ',err);
-            })
+                console.error('CartWriteError: ',err);
+            });
         })
         
         
