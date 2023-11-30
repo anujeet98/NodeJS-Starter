@@ -2,10 +2,10 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows, filedata])=>{
+  Product.findAll()
+  .then(products=>{
     res.render('shop/product-list', {
-      prods: rows,
+      prods: products,
       pageTitle: 'All Products',
       path: '/products'
     });
@@ -17,10 +17,10 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows, filedata])=>{
+  Product.findAll()
+  .then(products=>{
     res.render('shop/index', {
-      prods: rows,
+      prods: products,
       pageTitle: 'Shop',
       path: '/'
     });
@@ -33,11 +33,18 @@ exports.getIndex = (req, res, next) => {
 
 exports.getProductDetails = (req,res,next) => {
     const productId = req.params.productId;
-    Product.findById(productId)
-      .then(([rows, filedata])=>{
+    //using find all but returns array so take 0th index->
+    // Product.findAll({
+    //   where:{
+    //     id: productId
+    //   }
+    // })
+      //using findByPk (previously findById). returns 1 object and not the array
+      Product.findByPk(productId)
+      .then(product=>{
         res.render('shop/product-details', {
           path: '/products',
-          product: rows[0],
+          product: product,
           pageTitle: 'product Details'
         });
       })
