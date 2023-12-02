@@ -13,7 +13,8 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({
+  // Product.create({
+  req.user.createProduct({
     title: title,
     imageUrl: imageUrl,
     description: description,
@@ -28,9 +29,10 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  // Product.findAll()
+  req.user.getProducts()
     .then(products=>{
-      console.log(products);
+      // console.log(products);
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',
@@ -49,8 +51,10 @@ exports.getEditProduct = (req,res,next) => {
       return res.redirect('/');
     }
     const productId  = req.params.productId;
-    Product.findByPk(productId)
-    .then(product=>{
+    // Product.findByPk(productId)
+    req.user.getProducts()
+    .then(products=>{
+      const product = products[0];
       if(!product){
         console.error('productNotFoundError: redirecting to shop page');
         return res.redirect('/');
