@@ -12,6 +12,9 @@ const { Sequelize } = require('sequelize');
 
 const User = require('./models/user.js');
 const Product = require('./models/product.js');
+
+const Cart = require('./models/cart.js');
+const CartItems = require('./models/cart-items.js');
 //------------------------------------------------------------------------------
 const app = express();
 
@@ -38,8 +41,18 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
+//------------------------------------------------------------------------------
 Product.belongsTo(User, {constraints: true, onDelete: 'CASCADE'});
 User.hasMany(Product);
+
+User.hasOne(Cart);
+Cart.belongsTo(User); //optional
+
+Product.belongsToMany(Cart, {through: CartItems});
+Cart.belongsToMany(Product, {through: CartItems});
+
+
+
 
 seqelize
     // .sync({force:true})
@@ -56,6 +69,9 @@ seqelize
         return Promise.resolve(user);
     })
     .then(user => {
+        return user.createCart();
+    })
+    .then(cart => {
         app.listen(3000);
     })
     .catch(err => {
